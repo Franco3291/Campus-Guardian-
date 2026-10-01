@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Guardian Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="container nav">
+            <div class="brand">Campus Guardian</div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container dashboard">
+        <section class="dashboard-header">
+            <div>
+                <p class="eyebrow">Responder dashboard</p>
+                <h1>Campus safety overview</h1>
+            </div>
+            <div class="chip-row">
+                <span class="chip red">High priority</span>
+                <span class="chip amber">Monitoring</span>
+                <span class="chip green">Resolved</span>
+            </div>
+        </section>
+
+        <section class="map-panel">
+            <div class="map-placeholder">
+                <div class="map-point" style="top: 28%; left: 30%;">A</div>
+                <div class="map-point" style="top: 44%; left: 58%;">B</div>
+                <div class="map-point" style="top: 62%; left: 45%;">C</div>
+                <div class="map-point" style="top: 72%; left: 68%;">D</div>
+                <div class="map-pin danger" style="top: 42%; left: 56%;">!</div>
+            </div>
+        </section>
+
+        <section class="incident-list">
+            <div class="section-header">
+                <h2>Active incidents</h2>
+            </div>
+
+            <div id="incidentContainer">
+                {% for incident in incidents %}
+                <article class="incident-card severity-{{ incident.severity.lower() }}">
+                    <div class="incident-top">
+                        <div>
+                            <p class="incident-type">{{ incident.category }}</p>
+                            <h3>{{ incident.title }}</h3>
+                        </div>
+                        <span class="severity-badge {{ incident.severity.lower() }}">{{ incident.severity }}</span>
+                    </div>
+                    <div class="meta-row">
+                        <span>{{ incident.location }}</span>
+                        <span>{{ incident.time }}</span>
+                        <span>{{ incident.status }}</span>
+                    </div>
+                    <p>{{ incident.details or incident.analysis.summary }}</p>
+                    <div class="ai-box">
+                        <strong>AI analysis:</strong>
+                        <span>{{ incident.analysis.classification }} • {{ incident.analysis.severity }} priority</span>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

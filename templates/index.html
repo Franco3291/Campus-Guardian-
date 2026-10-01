@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Guardian</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="container nav">
+            <div class="brand">Campus Guardian</div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">Campus safety platform</p>
+                <h1>Report incidents fast. Protect the campus faster.</h1>
+                <p class="lead">
+                    Students and staff can quickly report safety issues while responders receive, prioritize,
+                    and track them in real time.
+                </p>
+                <div class="cta-row">
+                    <a class="primary-btn" href="#report-form">Report an incident</a>
+                    <button class="secondary-btn" id="sosBtn" type="button">Emergency SOS</button>
+                </div>
+            </div>
+            <div class="hero-card">
+                <h3>Live status</h3>
+                <div class="status-box">
+                    <span class="dot"></span>
+                    <strong>Security team online</strong>
+                </div>
+                <ul>
+                    <li>2 active incidents</li>
+                    <li>1 high-priority alert</li>
+                    <li>Campus map enabled</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature">
+                <h4>One-tap reporting</h4>
+                <p>Choose from theft, fire, suspicious activity, harassment, medical assistance, and more.</p>
+            </div>
+            <div class="feature">
+                <h4>Location aware</h4>
+                <p>Report incidents with campus map location and optional photos or notes.</p>
+            </div>
+            <div class="feature">
+                <h4>AI triage</h4>
+                <p>Auto-classify incidents, estimate severity, and summarize the problem for responders.</p>
+            </div>
+        </section>
+
+        <section class="report-box" id="report-form">
+            <div class="section-header">
+                <h2>Submit a report</h2>
+            </div>
+
+            <form action="/report" method="POST">
+                <div class="grid two-col">
+                    <label>
+                        Title
+                        <input type="text" name="title" placeholder="Suspicious activity near hostel gate" required />
+                    </label>
+                    <label>
+                        Incident type
+                        <select name="category">
+                            <option>Theft</option>
+                            <option>Medical Emergency</option>
+                            <option>Fire</option>
+                            <option>Assault/Harassment</option>
+                            <option selected>Suspicious Activity</option>
+                            <option>Unsafe Infrastructure</option>
+                            <option>Other</option>
+                        </select>
+                    </label>
+                </div>
+
+                <label>
+                    Location
+                    <input type="text" name="location" placeholder="Student Hostel Area" required />
+                </label>
+
+                <label>
+                    Details
+                    <textarea name="details" rows="5" placeholder="Describe what happened, who was involved, and any urgent concerns."></textarea>
+                </label>
+
+                <label class="checkbox-row">
+                    <input type="checkbox" name="anonymous" />
+                    Submit anonymously
+                </label>
+
+                <button class="primary-btn" type="submit">Submit report</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
