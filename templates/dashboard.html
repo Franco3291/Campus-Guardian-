@@ -51,13 +51,9 @@
         </section>
 
         <section class="map-panel">
-            <div id="campusMap" class="map-placeholder">
-                <div class="map-point" style="top: 28%; left: 30%;">A</div>
-                <div class="map-point" style="top: 44%; left: 58%;">B</div>
-                <div class="map-point" style="top: 62%; left: 45%;">C</div>
-                <div class="map-point" style="top: 72%; left: 68%;">D</div>
-                <div class="map-pin danger" style="top: 42%; left: 56%;">!</div>
-            </div>
+            <div id="campusMap" class="map-placeholder" role="region" aria-label="Incident locations map"></div>
+            <p id="dashboardMapStatus" class="map-caption">Incident markers appear here when location coordinates are available.</p>
+            <script id="incidentMapData" type="application/json">{{ map_incidents|tojson }}</script>
         </section>
 
         <section class="incident-list">
@@ -105,7 +101,7 @@
     </main>
 
     <script>
-        window.GOOGLE_MAPS_API_KEY = {{ ('"' + google_maps_api_key + '"') if google_maps_api_key else '""' }};
+        window.GOOGLE_MAPS_API_KEY = {{ google_maps_api_key|tojson }};
     </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

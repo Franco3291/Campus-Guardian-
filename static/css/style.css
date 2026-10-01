@@ -302,13 +302,34 @@ textarea {
 
 .map-placeholder {
   position: relative;
-  height: 260px;
-  border-radius: 14px;
+  height: 320px;
+  border-radius: 8px;
   background: linear-gradient(135deg, rgba(83, 200, 250, 0.18), rgba(18, 67, 95, 0.6)),
               linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
               linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
   background-size: auto, 25px 25px, 25px 25px;
   overflow: hidden;
+}
+
+.report-map {
+  height: 220px;
+  margin: 8px 0 0;
+}
+
+.map-caption {
+  margin: 10px 2px 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.map-link {
+  display: inline-block;
+  margin: 8px 2px 18px;
+  color: var(--primary);
+}
+
+.map-link[hidden] {
+  display: none;
 }
 
 .map-point {

@@ -60,6 +60,12 @@ def init_db():
         )
         '''
     )
+    incident_columns = {
+        column['name'] for column in conn.execute('PRAGMA table_info(incidents)').fetchall()
+    }
+    for column in ('lat', 'lng'):
+        if column not in incident_columns:
+            conn.execute(f'ALTER TABLE incidents ADD COLUMN {column} REAL')
 
     user_count = conn.execute('SELECT COUNT(*) FROM users').fetchone()[0]
     if user_count == 0:
@@ -210,6 +216,18 @@ def dashboard():
     incidents = conn.execute(
         'SELECT * FROM incidents ORDER BY created_at DESC'
     ).fetchall()
+    map_incidents = [
+        {
+            'lat': incident['lat'],
+            'lng': incident['lng'],
+            'title': incident['title'],
+            'category': incident['category'],
+            'severity': incident['severity'],
+            'status': incident['status'],
+        }
+        for incident in incidents
+        if incident['lat'] is not None and incident['lng'] is not None
+    ]
     stats = {
         'total': conn.execute('SELECT COUNT(*) FROM incidents').fetchone()[0],
         'high': conn.execute("SELECT COUNT(*) FROM incidents WHERE severity = 'High'").fetchone()[0],
@@ -217,7 +235,7 @@ def dashboard():
         'reported': conn.execute("SELECT COUNT(*) FROM incidents WHERE status = 'Reported'").fetchone()[0],
     }
     conn.close()
-    return render_template('dashboard.html', user=current_user(), incidents=incidents, stats=stats, google_maps_api_key=os.environ.get('GOOGLE_MAPS_API_KEY', ''))
+    return render_template('dashboard.html', user=current_user(), incidents=incidents, map_incidents=map_incidents, stats=stats, google_maps_api_key=os.environ.get('GOOGLE_MAPS_API_KEY', ''))
 
 
 @app.route('/report', methods=['POST'])

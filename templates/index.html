@@ -113,6 +113,9 @@
                 <input type="hidden" id="lngInput" name="lng" />
 
                 <div id="locationStatus" class="location-status">Location not captured yet.</div>
+                <div id="reportMap" class="map-placeholder report-map" role="region" aria-label="Report location map"></div>
+                <p id="reportMapStatus" class="map-caption">Use my location to preview the report location here.</p>
+                <a id="locationMapLink" class="map-link" href="#" target="_blank" rel="noopener" hidden>Open coordinates in Google Maps</a>
 
                 <label>
                     Details
@@ -137,7 +140,7 @@
     </main>
 
     <script>
-        window.GOOGLE_MAPS_API_KEY = {{ ('"' + google_maps_api_key + '"') if google_maps_api_key else '""' }};
+        window.GOOGLE_MAPS_API_KEY = {{ google_maps_api_key|tojson }};
     </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
