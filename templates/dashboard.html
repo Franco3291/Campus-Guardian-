@@ -13,6 +13,7 @@
             <nav>
                 <a href="/">Home</a>
                 <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
             </nav>
         </div>
     </header>
@@ -30,8 +31,27 @@
             </div>
         </section>
 
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span>Total</span>
+                <strong>{{ stats.total }}</strong>
+            </div>
+            <div class="stat-card">
+                <span>High</span>
+                <strong>{{ stats.high }}</strong>
+            </div>
+            <div class="stat-card">
+                <span>Critical</span>
+                <strong>{{ stats.critical }}</strong>
+            </div>
+            <div class="stat-card">
+                <span>Reported</span>
+                <strong>{{ stats.reported }}</strong>
+            </div>
+        </section>
+
         <section class="map-panel">
-            <div class="map-placeholder">
+            <div id="campusMap" class="map-placeholder">
                 <div class="map-point" style="top: 28%; left: 30%;">A</div>
                 <div class="map-point" style="top: 44%; left: 58%;">B</div>
                 <div class="map-point" style="top: 62%; left: 45%;">C</div>
@@ -47,30 +67,46 @@
 
             <div id="incidentContainer">
                 {% for incident in incidents %}
-                <article class="incident-card severity-{{ incident.severity.lower() }}">
+                <article class="incident-card severity-{{ incident['severity']|lower }}">
                     <div class="incident-top">
                         <div>
-                            <p class="incident-type">{{ incident.category }}</p>
-                            <h3>{{ incident.title }}</h3>
+                            <p class="incident-type">{{ incident['category'] }}</p>
+                            <h3>{{ incident['title'] }}</h3>
                         </div>
-                        <span class="severity-badge {{ incident.severity.lower() }}">{{ incident.severity }}</span>
+                        <span class="severity-badge {{ incident['severity']|lower }}">{{ incident['severity'] }}</span>
                     </div>
                     <div class="meta-row">
-                        <span>{{ incident.location }}</span>
-                        <span>{{ incident.time }}</span>
-                        <span>{{ incident.status }}</span>
+                        <span>{{ incident['location'] }}</span>
+                        <span>{{ incident['created_at'] }}</span>
+                        <span>{{ incident['status'] }}</span>
                     </div>
-                    <p>{{ incident.details or incident.analysis.summary }}</p>
+                    <p>{{ incident['details'] or incident['ai_summary'] }}</p>
                     <div class="ai-box">
-                        <strong>AI analysis:</strong>
-                        <span>{{ incident.analysis.classification }} • {{ incident.analysis.severity }} priority</span>
+                        <strong>AI summary:</strong>
+                        <span>{{ incident['ai_summary'] }}</span>
                     </div>
+
+                    <form class="status-form" method="POST" action="{{ url_for('update_incident_status', incident_id=incident['id']) }}">
+                        <label>
+                            Update status
+                            <select name="status">
+                                <option {% if incident['status'] == 'Reported' %}selected{% endif %}>Reported</option>
+                                <option {% if incident['status'] == 'Acknowledged' %}selected{% endif %}>Acknowledged</option>
+                                <option {% if incident['status'] == 'Responding' %}selected{% endif %}>Responding</option>
+                                <option {% if incident['status'] == 'Resolved' %}selected{% endif %}>Resolved</option>
+                            </select>
+                        </label>
+                        <button class="small-btn" type="submit">Update</button>
+                    </form>
                 </article>
                 {% endfor %}
             </div>
         </section>
     </main>
 
+    <script>
+        window.GOOGLE_MAPS_API_KEY = {{ ('"' + google_maps_api_key + '"') if google_maps_api_key else '""' }};
+    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

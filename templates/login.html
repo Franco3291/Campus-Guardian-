@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Guardian Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="container nav">
+            <div class="brand">Campus Guardian</div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container login-layout">
+        <section class="login-box">
+            <p class="eyebrow">Secure access</p>
+            <h1>Sign in</h1>
+
+            {% if error %}
+            <div class="error-box">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST" action="/login">
+                <label>
+                    Role
+                    <select name="role">
+                        <option value="student">Student</option>
+                        <option value="responder">Responder</option>
+                    </select>
+                </label>
+
+                <label>
+                    Email
+                    <input type="email" name="email" placeholder="student@campus.edu" required />
+                </label>
+
+                <label>
+                    Password
+                    <input type="password" name="password" value="password123" required />
+                </label>
+
+                <button class="primary-btn" type="submit">Login</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

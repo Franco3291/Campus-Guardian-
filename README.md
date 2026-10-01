@@ -1,45 +1,54 @@
 # Campus Guardian
 
-Campus Guardian is a campus safety platform that helps students and staff report incidents quickly and enables authorized responders to monitor, triage, and manage those reports from a central dashboard.
+Campus Guardian is a campus safety platform built to help students and staff report emergencies quickly while giving authorized responders a centralized place to receive, triage, and manage incident reports.
 
-## Project idea
+## Features
 
-This project focuses on making campus safety faster, smarter, and more visible. Students can submit incident reports with location details and urgency, while responders receive the reports on a live dashboard with AI-assisted triage and prioritization.
-
-## Key features
-
-- Emergency reporting for theft, medical incidents, fire, harassment, suspicious activity, unsafe infrastructure, and other concerns.
-- Location-aware reports from a campus map or text-based location field.
+- Student incident reporting with category selection and location details.
 - Optional anonymous reporting.
-- SOS button for emergency escalation.
-- Responder dashboard with active incidents, severity tags, and status tracking.
-- AI classification and severity analysis using simple rule-based logic in the MVP.
-- Incident lifecycle tracking: Reported → Acknowledged → Responding → Resolved.
+- Emergency SOS trigger for urgent situations.
+- Role-based login for students and responders.
+- SQLite-backed persistence instead of in-memory demo data.
+- Responder dashboard with incident status updates and live severity tracking.
+- AI-style classification and severity summary for each report.
+- Incident lifecycle: Reported → Acknowledged → Responding → Resolved.
 
-## MVP architecture
+## Demo login accounts
 
-- Frontend: HTML, CSS, JavaScript
-- Backend: Python Flask
-- Data layer: in-memory incident list for demo purposes
-- AI layer: lightweight rule-based classifier and severity estimator
-- UI: report form + responder dashboard
+- Student: student@campus.edu / password123
+- Responder: responder@campus.edu / password123
+
+## Google Maps configuration
+
+To enable live map integration and automatic browser geolocation, add your Google Maps JavaScript API key in the environment before starting the app:
+
+```powershell
+$env:GOOGLE_MAPS_API_KEY="YOUR_GOOGLE_MAPS_API_KEY"
+python app.py
+```
+
+If you do not provide a key, the app still works in demo mode, but the Google map will not load and the browser will only use geolocation for report capture.
 
 ## Project structure
 
-- app.py — Flask application
-- templates/index.html — student-facing landing page and incident form
-- templates/dashboard.html — responder dashboard
-- static/css/style.css — styling for the app
-- static/js/main.js — front-end interactions, including SOS button
+- app.py — Flask app and database setup
+- templates/index.html — landing page and incident form
+- templates/login.html — login screen for both roles
+- templates/dashboard.html — responder dashboard with status controls
+- static/css/style.css — app styling
+- static/js/main.js — SOS interaction logic
+- campus_guardian.db — SQLite database generated on first run
 - requirements.txt — Python dependencies
 
 ## Run locally
 
 1. Open the project folder.
-2. Create a virtual environment if needed.
+2. Create and activate a virtual environment if needed.
 3. Install dependencies:
 
-   pip install -r requirements.txt
+   python -m venv .venv
+   .\.venv\Scripts\activate
+   python -m pip install -r requirements.txt
 
 4. Start the app:
 
@@ -49,22 +58,21 @@ This project focuses on making campus safety faster, smarter, and more visible. 
 
    http://127.0.0.1:5000/
 
-## Demo flow
+## Hackathon flow
 
-- A student opens the home page and submits a suspicious activity report.
-- The app automatically analyzes the category and suggests a severity level.
-- The responder dashboard shows the incident, its location, and the AI summary.
-- Security personnel can monitor and manage the case from one place.
+- A student logs in and reports a suspicious activity incident.
+- The app classifies the incident and sets a preliminary severity.
+- The responder logs in and sees the dashboard with the new alert.
+- The responder updates the incident status from Reported to Acknowledged or Responding.
 
-## Suggested next steps
+## Next improvements
 
-- Add real database storage with MySQL or PostgreSQL.
-- Add authentication for responders and students.
-- Add map integration with Leaflet and OpenStreetMap.
-- Add image upload support.
-- Replace rule-based AI with a real ML or NLP model.
-- Add email/SMS notifications for emergency alerts.
+- Add campus map integration with Leaflet and OpenStreetMap.
+- Add photo upload support.
+- Add SMS/email notifications for emergency cases.
+- Add a real ML model or NLP classifier for incident detection.
+- Expand to a multi-role admin dashboard.
 
-## Hackathon pitch angle
+## Pitch angle
 
-Campus Guardian turns campus safety into a fast, digital response system: faster reporting, faster triage, and better visibility for security teams.
+Campus Guardian turns campus safety into a fast, digital response system: faster reporting, faster triage, and better visibility for the entire campus security team.

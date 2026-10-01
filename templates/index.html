@@ -13,6 +13,11 @@
             <nav>
                 <a href="/">Home</a>
                 <a href="/dashboard">Dashboard</a>
+                {% if user %}
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                {% endif %}
             </nav>
         </div>
     </header>
@@ -27,9 +32,19 @@
                     and track them in real time.
                 </p>
                 <div class="cta-row">
-                    <a class="primary-btn" href="#report-form">Report an incident</a>
-                    <button class="secondary-btn" id="sosBtn" type="button">Emergency SOS</button>
+                    {% if user %}
+                        <a class="primary-btn" href="#report-form">Report an incident</a>
+                        <button class="secondary-btn" id="sosBtn" type="button">Emergency SOS</button>
+                    {% else %}
+                        <a class="primary-btn" href="/login">Student login</a>
+                        <a class="secondary-btn" href="/login">Responder login</a>
+                    {% endif %}
                 </div>
+                {% if google_maps_api_key %}
+                <div class="map-inline-note">
+                    GPS ready: browser location can be captured automatically when you enable it.
+                </div>
+                {% endif %}
             </div>
             <div class="hero-card">
                 <h3>Live status</h3>
@@ -38,9 +53,9 @@
                     <strong>Security team online</strong>
                 </div>
                 <ul>
-                    <li>2 active incidents</li>
-                    <li>1 high-priority alert</li>
-                    <li>Campus map enabled</li>
+                    <li>{{ incidents|length }} active incidents</li>
+                    <li>AI-assisted triage enabled</li>
+                    <li>Role-based access enabled</li>
                 </ul>
             </div>
         </section>
@@ -52,7 +67,7 @@
             </div>
             <div class="feature">
                 <h4>Location aware</h4>
-                <p>Report incidents with campus map location and optional photos or notes.</p>
+                <p>Report incidents with campus map location, notes, and responsive status updates.</p>
             </div>
             <div class="feature">
                 <h4>AI triage</h4>
@@ -60,12 +75,13 @@
             </div>
         </section>
 
+        {% if user %}
         <section class="report-box" id="report-form">
             <div class="section-header">
                 <h2>Submit a report</h2>
             </div>
 
-            <form action="/report" method="POST">
+            <form action="/report" method="POST" id="reportForm">
                 <div class="grid two-col">
                     <label>
                         Title
@@ -85,10 +101,18 @@
                     </label>
                 </div>
 
-                <label>
-                    Location
-                    <input type="text" name="location" placeholder="Student Hostel Area" required />
-                </label>
+                <div class="location-row">
+                    <label class="location-field">
+                        Location
+                        <input type="text" id="locationInput" name="location" placeholder="Student Hostel Area" required />
+                    </label>
+                    <button class="small-btn" type="button" id="useLocationBtn">Use my location</button>
+                </div>
+
+                <input type="hidden" id="latInput" name="lat" />
+                <input type="hidden" id="lngInput" name="lng" />
+
+                <div id="locationStatus" class="location-status">Location not captured yet.</div>
 
                 <label>
                     Details
@@ -103,8 +127,18 @@
                 <button class="primary-btn" type="submit">Submit report</button>
             </form>
         </section>
+        {% else %}
+        <section class="report-box guest-box">
+            <h2>Login to report an incident</h2>
+            <p>Use the student login to submit reports, or the responder login to monitor incidents on the dashboard.</p>
+            <a class="primary-btn" href="/login">Go to login</a>
+        </section>
+        {% endif %}
     </main>
 
+    <script>
+        window.GOOGLE_MAPS_API_KEY = {{ ('"' + google_maps_api_key + '"') if google_maps_api_key else '""' }};
+    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
